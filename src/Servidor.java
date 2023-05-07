@@ -6,17 +6,24 @@ import java.net.UnknownHostException;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Servidor {
 
     private DatagramSocket socket;
     private boolean running;
     private Map<String, ClienteInfo> clients;
+    private Map<String, Tabuleiro> tabuleiros;
+    private Pattern pattern;
+    private Matcher matcher;
 
     public Servidor() throws SocketException, UnknownHostException {
         InetAddress localAddress = InetAddress.getByName("192.168.0.2");
         this.socket = new DatagramSocket(5000, localAddress);
         this.clients = new HashMap<>();
+        this.tabuleiros = new HashMap<>();
+        this.pattern = Pattern.compile("^(\\d),(\\d)$");
     }
 
     public void start() {
@@ -34,28 +41,45 @@ public class Servidor {
 
                 if (!clients.containsKey(clientId)) {
                     clients.put(clientId, new ClienteInfo(address, port));
+                    tabuleiros.put(clientId, new Tabuleiro());
                     System.out.println("Cliente conectado: " + clientId);
                 }
 
                 String received = new String(packet.getData(), 0, packet.getLength());
+                matcher = pattern.matcher(received);
                 System.out.println(
                         "Received packet from " + packet.getAddress() + ":" + packet.getPort() + ": " + received);
 
-                if (received.equals("bye")) {
-                    System.out.println("Client " + clientId + " sent bye.....EXITING");
-                    clients.remove(clientId);
-                } else {
-                    // Enviar a mensagem para todos os clientes conectados, exceto para o remetente
-                    for (ClienteInfo clientInfo : clients.values()) {
-                        if (!clientInfo.getId().equals(clientId)) {
-                            buf = (clientId + ": " + received).getBytes();
-                            DatagramPacket resposta = new DatagramPacket(buf, buf.length, clientInfo.getAddress(),
-                                    clientInfo.getPort());
-                            socket.send(resposta);
+                if (matcher.matches()) {
+                    int x = Integer.parseInt(matcher.group(1));
+                    int y = Integer.parseInt(matcher.group(2));
+
+                    if (received.equals("bye")) {
+                        System.out.println("Client " + clientId + " sent bye.....EXITING");
+                        clients.remove(clientId);
+                    } else {
+                        // Enviar a mensagem para todos os clientes conectados, exceto para o remetente
+                        for (ClienteInfo clientInfo : clients.values()) {
+                            if (!clientInfo.getId().equals(clientId)) {
+                                boolean acertou = tabuleiros.get(clientId).realizarTiro(x, y);
+                                String resultado = acertou ? "Acertou" : "Errou";
+                                buf = (clientId + ": " + resultado).getBytes();
+                                DatagramPacket resposta = new DatagramPacket(buf, buf.length, clientInfo.getAddress(),
+                                        clientInfo.getPort());
+                                socket.send(resposta);
+
+                                if (tabuleiros.get(clientId).verificarFimDeJogo()) {
+                                    buf = ("Fim de jogo, " + clientId + " venceu!").getBytes();
+                                    resposta = new DatagramPacket(buf, buf.length, clientInfo.getAddress(),
+                                            clientInfo.getPort());
+                                    socket.send(resposta);
+                                    stop();
+                                }
+                            }
                         }
+
                     }
                 }
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

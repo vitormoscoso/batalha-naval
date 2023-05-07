@@ -37,10 +37,20 @@ public class Cliente {
             System.out.println("Digite sua jogada no formato 'x,y': ");
             inp = System.console().readLine();
 
+            String[] coords = inp.split(",");
+            int x = Integer.parseInt(coords[0]);
+            int y = Integer.parseInt(coords[1]);
+
             if (!inp.equals("bye")) {
-                cliente.send(inp, 5000);
-                String response = cliente.receive();
-                System.out.println(response);
+                if (x >= 0 && x < Tabuleiro.TAMANHO_TABULEIRO && y >= 0 && y < Tabuleiro.TAMANHO_TABULEIRO) {
+                    cliente.send(inp, 5000);
+                    String response = cliente.receive();
+                    System.out.println(response);
+                } else {
+                    System.out.println("Coordenadas inválidas. Por favor, insira coordenadas entre 0 e "
+                            + (Tabuleiro.TAMANHO_TABULEIRO - 1) + ".");
+                }
+
             }
 
         } while (!inp.equals("bye"));
