@@ -15,7 +15,7 @@ public class Cliente {
         byte[] buf = message.getBytes();
         DatagramPacket packet = new DatagramPacket(buf, buf.length, address, port);
         socket.send(packet);
-        System.out.println("Sent packet to: " + address + ":" + port);
+        System.out.println("Sent packet to: " + address + ": " + port);
     }
 
     public String receive() throws IOException {
