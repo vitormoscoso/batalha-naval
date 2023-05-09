@@ -1,18 +1,31 @@
-## Getting Started
+# Batalha naval
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+O jogo de batalha naval é um jogo bastante popular mundialmente. Esse projeto implementa o batalha naval com dois jogadores jogando um contra o outro. O projeto utiliza o prtocolo UDP para a comunicação e funciona com um servidor e dois clientes.
 
-## Folder Structure
+## Installation
 
-The workspace contains two folders by default, where:
+- Para instalar, certifique-se de ter o [JDK](https://www.oracle.com/br/java/technologies/downloads/) instalado;
+- Faça o clone desse repositório na branch master
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Usage
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+- Após ter feito o clone, vá até o local de instalação dentro da pasta 'src':
+```bash
+caminho-da-instalação/batalha-naval/src
+```
+- Rode o comando abaixo para compilar todos os arquivos java:
+```bash
+javac *.java
+```
+- No mesmo terminal que foi rodado o comando anterior, inicialize o servidor passando o ip da máquina e porta da sua escolha:
+```bash
+java Servidor 0.0.0.0 5000
+```
+- Em outro terminal, agora para o jogador, inicialize o cliente número 1 passando o ip do servidor do comnando passado:
+```bash
+java Cliente 0.0.0.0
+```
+- Repita o processo para o jogador 2:
+```bash
+java Cliente 0.0.0.0
+```
