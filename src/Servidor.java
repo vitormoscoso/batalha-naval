@@ -18,9 +18,9 @@ public class Servidor {
     private Pattern pattern;
     private Matcher matcher;
 
-    public Servidor() throws SocketException, UnknownHostException {
-        InetAddress localAddress = InetAddress.getByName("192.168.0.2");
-        this.socket = new DatagramSocket(5000, localAddress);
+    public Servidor(String ipAddress, int port) throws SocketException, UnknownHostException {
+        InetAddress localAddress = InetAddress.getByName(ipAddress);
+        this.socket = new DatagramSocket(port, localAddress);
         this.clients = new HashMap<>();
         this.tabuleiros = new HashMap<>();
         this.pattern = Pattern.compile("^(\\d),(\\d)$");
@@ -93,7 +93,15 @@ public class Servidor {
 
     public static void main(String[] args)
             throws IOException {
-        Servidor server = new Servidor();
+        if (args.length < 2) {
+            System.out.println("Usage: java Servidor <ip_address> <port>");
+            return;
+        }
+
+        String ipAddress = args[0];
+        int port = Integer.parseInt(args[1]);
+
+        Servidor server = new Servidor(ipAddress, port);
         System.out.println(
                 "Server listening on: " + server.socket.getLocalSocketAddress());
         server.start();

@@ -30,7 +30,13 @@ public class Cliente {
     }
 
     public static void main(String args[]) throws IOException {
-        Cliente cliente = new Cliente("192.168.0.2");
+        if (args.length < 1) {
+            System.out.println("Usage: java Cliente <server_ip_address>");
+            return;
+        }
+
+        String serverIpAddress = args[0];
+        Cliente cliente = new Cliente(serverIpAddress);
 
         String inp;
         do {
