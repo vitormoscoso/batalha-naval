@@ -19,13 +19,13 @@ javac *.java
 ```
 - No mesmo terminal que foi rodado o comando anterior, inicialize o servidor passando o ip da máquina e porta da sua escolha:
 ```bash
-java Servidor 0.0.0.0 5000
+java Servidor <endereço_ip> <porta>
 ```
 - Em outro terminal, agora para o jogador, inicialize o cliente número 1 passando o ip do servidor do comnando passado:
 ```bash
-java Cliente 0.0.0.0
+java Cliente <endereço_ip>
 ```
 - Repita o processo para o jogador 2:
 ```bash
-java Cliente 0.0.0.0
+java Cliente <endereço_ip>
 ```
