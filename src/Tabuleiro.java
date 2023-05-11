@@ -7,7 +7,7 @@ public class Tabuleiro {
     private static final char AGUA = '~';
     private static final char TIRO_ACERTADO = 'X';
     private static final char TIRO_ERRADO = 'O';
-    public static final int TAMANHO_TABULEIRO = 2;
+    public static final int TAMANHO_TABULEIRO = 10;
 
     private char[][] tabuleiro;
 
@@ -26,9 +26,9 @@ public class Tabuleiro {
     }
 
     private void posicionarNavios() {
-        posicionarNaviosAleatoriamente(NAVIO_SUBMARINO, 1, 1);
-        posicionarNaviosAleatoriamente(NAVIO_CRUZADOR, 1, 1);
-        posicionarNaviosAleatoriamente(NAVIO_PORTA_AVIOES, 1, 1);
+        posicionarNaviosAleatoriamente(NAVIO_SUBMARINO, 3, 1);
+        posicionarNaviosAleatoriamente(NAVIO_CRUZADOR, 2, 2);
+        posicionarNaviosAleatoriamente(NAVIO_PORTA_AVIOES, 1, 3);
     }
 
     private void posicionarNaviosAleatoriamente(char navio, int quantidade, int tamanho) {
